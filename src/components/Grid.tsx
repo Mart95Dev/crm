@@ -1,9 +1,9 @@
 import Single from './Single';
-import DataBaseType from './App';
+import { DataBaseType } from './App';
 
 export type PropsUser = {
-  users: DataBaseType;
-  deleteUserProfil: () => {};
+  users: DataBaseType[];
+  deleteUserProfil: (id: string) => void;
 };
 
 function Grid({ users, deleteUserProfil }: PropsUser) {
@@ -11,7 +11,7 @@ function Grid({ users, deleteUserProfil }: PropsUser) {
     <div>
       <div className="row">
         <ul>
-          {users.map((user: string, key: number) => (
+          {users.map((user, key: number) => (
             <Single
               key={key + 1}
               user={user}

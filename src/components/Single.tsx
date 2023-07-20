@@ -1,9 +1,8 @@
 import { DataBaseType } from './App';
-import { PropsUser } from './Grid';
 
 type Props = {
   user: DataBaseType;
-  deleteUserProfil: PropsUser;
+  deleteUserProfil: (id: string) => void;
 };
 
 function single({ user, deleteUserProfil }: Props) {

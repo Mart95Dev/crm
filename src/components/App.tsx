@@ -6,6 +6,7 @@ import Grid from './Grid';
 import Form from './Form';
 
 export type DataBaseType = {
+  id: string;
   prenom: string;
   nom: string;
   email: string;
@@ -14,19 +15,34 @@ export type DataBaseType = {
 };
 
 function App() {
-  const [userProfil, setUserProfil] = useState<DataBaseType>([]);
+  const initialUserprofil: DataBaseType[] = [];
+  const [userProfil, setUserProfil] = useState(initialUserprofil);
 
-  const getUserProfil = async () => {
-    await getDocs(collection(db, 'contacts')).then((querySnapshot) => {
-      const newUserProfil = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setUserProfil(newUserProfil);
-    });
+  const getUserProfil = () => {
+    getDocs(collection(db, 'contacts'))
+      .then((querySnapshot) => {
+        const newUserProfil: DataBaseType[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data() as DataBaseType;
+          return {
+            id: doc.id,
+            prenom: data.prenom || '',
+            nom: data.nom || '',
+            email: data.email || '',
+            compagnie: data.compagnie || '',
+            notes: data.notes || '',
+          };
+        });
+        setUserProfil(newUserProfil);
+      })
+      .catch((error) => {
+        console.error(
+          'Erreur lors de la récupération des profils utilisateur :',
+          error
+        );
+      });
   };
 
-  const deleteUserProfil = async (id: number) => {
+  const deleteUserProfil = async (id: string) => {
     await deleteDoc(doc(db, 'contacts', id));
   };
 
