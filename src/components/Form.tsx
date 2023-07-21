@@ -1,23 +1,38 @@
+import './form.css';
 import { collection, addDoc } from 'firebase/firestore';
 import db from '../firebase';
+import { FormEvent } from 'react';
+
+type AddContactFunction = (e: FormEvent<HTMLFormElement>) => Promise<void>;
 
 function Form() {
-  const addContact = (e: Event) => {
+  const addContact: AddContactFunction = async (e) => {
     e.preventDefault();
-    addDoc(collection(db, 'contacts'), {
-      prenom: e.target.prenom.value,
-      nom: e.target.nom.value,
-      email: e.target.email.value,
-      compagnie: e.target.compagnie.value,
-      notes: e.target.notes.value,
-    });
+    const resetForm = document.getElementById('addContact') as HTMLFormElement;
 
-    //reset formulaire
-    document.getElementById('addContact').reset();
+    const target = e.target as typeof e.target & {
+      prenom: { value: string };
+      nom: { value: string };
+      email: { value: string };
+      compagnie: { value: string };
+      notes: { value: string };
+    };
+
+    const contactData = {
+      prenom: target.prenom.value,
+      nom: target.nom.value,
+      email: target.email.value,
+      compagnie: target.compagnie.value,
+      notes: target.notes.value,
+    };
+
+    await addDoc(collection(db, 'contacts'), contactData);
+
+    resetForm.reset();
   };
 
   return (
-    <div className="row">
+    <div className="row form-space-top">
       <form className="col s12" id="addContact" onSubmit={addContact}>
         <div className="row">
           <div className="input-field col s6">

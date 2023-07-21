@@ -1,4 +1,5 @@
 import { DataBaseType } from './App';
+import './single.css';
 
 type Props = {
   user: DataBaseType;
@@ -8,7 +9,7 @@ type Props = {
 function single({ user, deleteUserProfil }: Props) {
   return (
     <div>
-      <div className="col s12 l6">
+      <div className="col s12 m6 l4">
         <div className="card">
           <div className="card-image">
             <img src="./portrait.jpg" />
